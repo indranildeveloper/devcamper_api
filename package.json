@@ -1,11 +1,12 @@
 {
   "name": "devcamper-api",
   "description": "Devcamper Backend API",
-  "main": "server.js",
+  "main": "app/app.js",
   "author": "Indranil Halder<indranilhalder.dev@gmail.com>",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "NODE_ENV=production node app/app.js",
+    "dev": "nodemon app/app.js"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
