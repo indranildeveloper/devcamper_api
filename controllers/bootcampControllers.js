@@ -5,11 +5,18 @@ import Bootcamp from "../models/BootcampModel.js";
  * @route   GET /api/v1/bootcamps
  * @access  Public
  */
-export const getBootcamps = (req, res, next) => {
-  res.status(200).json({
-    success: true,
-    msg: "Show all bootcamps",
-  });
+export const getBootcamps = async (req, res, next) => {
+  try {
+    const bootcamps = await Bootcamp.find();
+    res.status(200).json({
+      success: true,
+      data: bootcamps,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+    });
+  }
 };
 
 /**
@@ -17,11 +24,23 @@ export const getBootcamps = (req, res, next) => {
  * @route   GET /api/v1/bootcamps/:bootcampId
  * @access  Public
  */
-export const getBootcamp = (req, res, next) => {
-  res.status(200).json({
-    success: true,
-    msg: `Show bootcamp ${req.params.bootcampId}`,
-  });
+export const getBootcamp = async (req, res, next) => {
+  try {
+    const bootcamp = await Bootcamp.findById(req.params.bootcampId);
+
+    if (!bootcamp) {
+      return res.status(400).json({ success: false });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: bootcamp,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+    });
+  }
 };
 
 /**
