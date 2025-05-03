@@ -6,6 +6,7 @@ import morgan from "morgan";
 import colors from "colors";
 import connectDB from "../database/database.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
+import errorHandler from "../middlewares/errorMiddleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,6 +29,9 @@ if (process.env.NODE_ENV === "development") {
 
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);
+
+// Error middleware
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
