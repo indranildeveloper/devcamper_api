@@ -37,7 +37,7 @@ const BootcampSchema = new mongoose.Schema({
   },
   address: {
     type: String,
-    required: [true, "Please add an address"],
+    required: [true, "Please add an address!"],
   },
   location: {
     // Geojson point
@@ -71,8 +71,8 @@ const BootcampSchema = new mongoose.Schema({
   },
   averageRating: {
     type: Number,
-    min: [1, "Rating must be at least 1"],
-    max: [10, "Rating must can not be more than 10"],
+    min: [1, "Rating must be at least 1!"],
+    max: [10, "Rating must can not be more than 10!"],
   },
   averageCost: {
     type: Number,
