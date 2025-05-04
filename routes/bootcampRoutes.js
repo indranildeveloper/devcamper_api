@@ -5,10 +5,12 @@ import {
   getBootcamp,
   getBootcamps,
   updateBootcamp,
+  getBootcampsInRadius,
 } from "../controllers/bootcampControllers.js";
 
 const router = express.Router();
 
+router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
 router.route("/").get(getBootcamps).post(createBootcamp);
 router
   .route("/:bootcampId")
