@@ -4,6 +4,7 @@ import express from "express";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import colors from "colors";
+import qs from "qs";
 import connectDB from "../database/database.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
 import errorHandler from "../middlewares/errorMiddleware.js";
@@ -22,6 +23,8 @@ const app = express();
 // Middlewares
 // Body parser
 app.use(express.json());
+app.use(express.urlencoded({ extended: true, parameterLimit: 10000 }));
+app.set("query parser", (str) => qs.parse(str, { parameterLimit: 10000 }));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
