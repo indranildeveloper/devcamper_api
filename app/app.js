@@ -7,6 +7,7 @@ import colors from "colors";
 import qs from "qs";
 import connectDB from "../database/database.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
+import coursesRoutes from "../routes/courseRoutes.js";
 import errorHandler from "../middlewares/errorMiddleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -32,6 +33,7 @@ if (process.env.NODE_ENV === "development") {
 
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);
+app.use("/api/v1/courses", coursesRoutes);
 
 // Error middleware
 app.use(errorHandler);
