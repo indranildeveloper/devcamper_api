@@ -29,7 +29,7 @@ export const getBootcamps = asyncHandler(async (req, res, next) => {
   );
 
   // Finding the resource
-  query = Bootcamp.find(JSON.parse(queryStr));
+  query = Bootcamp.find(JSON.parse(queryStr)).populate("courses");
 
   // Select fields
   if (req.query.select) {
@@ -155,7 +155,7 @@ export const updateBootcamp = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 export const deleteBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndDelete(req.params.bootcampId);
+  const bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
   if (!bootcamp) {
     return next(
@@ -165,6 +165,8 @@ export const deleteBootcamp = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  await bootcamp.deleteOne();
 
   res.status(200).json({
     success: true,
