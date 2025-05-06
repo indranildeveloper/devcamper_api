@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import colors from "colors";
 import Bootcamp from "../models/BootcampModel.js";
+import Course from "../models/CourseModel.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,11 +25,15 @@ mongoose
 const bootcamps = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/bootcamps.json`, "utf-8")
 );
+const courses = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/courses.json`, "utf-8")
+);
 
 // Import into database
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
+    await Course.create(courses);
     console.log("Data Imported...".green.inverse);
     process.exit(1);
   } catch (error) {
@@ -40,6 +45,7 @@ const importData = async () => {
 const destroyData = async () => {
   try {
     await Bootcamp.deleteMany();
+    await Course.deleteMany();
     console.log("Data Destroyed...".red.inverse);
     process.exit(1);
   } catch (error) {
