@@ -6,10 +6,21 @@ import {
   updateCourse,
   deleteCourse,
 } from "../controllers/courseControllers.js";
+import Course from "../models/CourseModel.js";
+import advancedResults from "../middlewares/advancedResults.js";
 
 const router = express.Router({ mergeParams: true });
 
-router.route("/").get(getCourses).post(createCourse);
+router
+  .route("/")
+  .get(
+    advancedResults(Course, {
+      path: "bootcamp",
+      select: "name description",
+    }),
+    getCourses
+  )
+  .post(createCourse);
 router
   .route("/:courseId")
   .get(getCourse)
