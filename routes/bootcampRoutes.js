@@ -6,6 +6,7 @@ import {
   getBootcamps,
   updateBootcamp,
   getBootcampsInRadius,
+  uploadBootcampPhoto,
 } from "../controllers/bootcampControllers.js";
 // Include other resource routers
 import courseRouter from "./courseRoutes.js";
@@ -16,6 +17,7 @@ const router = express.Router();
 router.use("/:bootcampId/courses", courseRouter);
 
 router.route("/radius/:zipcode/:distance").get(getBootcampsInRadius);
+router.route("/:bootcampId/photo").put(uploadBootcampPhoto);
 router.route("/").get(getBootcamps).post(createBootcamp);
 router
   .route("/:bootcampId")

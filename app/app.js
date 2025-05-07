@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import morgan from "morgan";
 import colors from "colors";
 import qs from "qs";
+import fileUpload from "express-fileupload";
 import connectDB from "../database/database.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
 import coursesRoutes from "../routes/courseRoutes.js";
@@ -27,9 +28,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, parameterLimit: 10000 }));
 app.set("query parser", (str) => qs.parse(str, { parameterLimit: 10000 }));
 
+// Set static folder
+app.use(express.static(path.join(__dirname, "../public")));
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+// File uploading
+app.use(fileUpload());
 
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);
