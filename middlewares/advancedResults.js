@@ -1,3 +1,22 @@
+/**
+ * Middleware to provide advanced query results for Mongoose models.
+ * Supports filtering, field selection, sorting, pagination, and population.
+ *
+ * @param {mongoose.Model} model - The Mongoose model to query.
+ * @param {Object|String} [populate] - Population options for Mongoose's populate method.
+ * @returns {Function} Express middleware function that attaches results to res.advancedResults.
+ *
+ * @example
+ * ? Usage in a route
+ * router.get('/api/v1/resources', advancedResults(ResourceModel, 'relatedField'), controllerMethod);
+ *
+ * ? Query parameters supported:
+ *  - Filtering: /api/v1/resources?field=value
+ *  - Operators: /api/v1/resources?field[gt]=value
+ *  - Field selection: /api/v1/resources?select=field1,field2
+ *  - Sorting: /api/v1/resources?sort=field1,-field2
+ *  - Pagination: /api/v1/resources?page=2&limit=10
+ */
 const advancedResults = (model, populate) => async (req, res, next) => {
   let query;
 

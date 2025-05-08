@@ -1,5 +1,18 @@
 import ErrorResponse from "../utils/ErrorResponse.js";
 
+/**
+ * Express error handling middleware to process and respond to errors.
+ *
+ * Handles specific Mongoose errors (CastError, duplicate key, ValidationError)
+ * and formats them into standardized API error responses.
+ *
+ * @function
+ * @param {Object} err - The error object.
+ * @param {import('express').Request} req - The Express request object.
+ * @param {import('express').Response} res - The Express response object.
+ * @param {import('express').NextFunction} next - The next middleware function.
+ * @returns {void}
+ */
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
 
