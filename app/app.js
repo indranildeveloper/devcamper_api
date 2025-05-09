@@ -7,6 +7,7 @@ import colors from "colors";
 import qs from "qs";
 import fileUpload from "express-fileupload";
 import connectDB from "../database/database.js";
+import authRoutes from "../routes/authRoutes.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
 import coursesRoutes from "../routes/courseRoutes.js";
 import errorHandler from "../middlewares/errorMiddleware.js";
@@ -41,6 +42,7 @@ app.use(fileUpload());
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);
 app.use("/api/v1/courses", coursesRoutes);
+app.use("/api/v1/auth", authRoutes);
 
 // Error middleware
 app.use(errorHandler);
