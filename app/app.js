@@ -6,6 +6,7 @@ import morgan from "morgan";
 import colors from "colors";
 import qs from "qs";
 import fileUpload from "express-fileupload";
+import cookieParser from "cookie-parser";
 import connectDB from "../database/database.js";
 import authRoutes from "../routes/authRoutes.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
@@ -26,6 +27,8 @@ const app = express();
 // Middlewares
 // Body parser
 app.use(express.json());
+// Cookie parser
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, parameterLimit: 10000 }));
 app.set("query parser", (str) => qs.parse(str, { parameterLimit: 10000 }));
 

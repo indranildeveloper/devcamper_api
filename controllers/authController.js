@@ -2,6 +2,28 @@ import User from "../models/UserModel.js";
 import asyncHandler from "../middlewares/asyncMiddleware.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 
+// Get token from model, create cookie and send response
+const sendTokenResponse = (user, statusCode, res) => {
+  // Create token
+  const token = user.getSignedJwtToken();
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === "production") {
+    cookieOptions.secure = true;
+  }
+
+  res
+    .status(statusCode)
+    .cookie("token", token, cookieOptions)
+    .json({ success: true, token });
+};
+
 /**
  * @desc    Register user
  * @route   POST /api/v1/auth/register
@@ -13,10 +35,7 @@ export const registerUser = asyncHandler(async (req, res, next) => {
   // Create user
   const user = await User.create({ name, email, password, role });
 
-  // Create token
-  const token = user.getSignedJwtToken();
-
-  res.status(200).json({ success: true, token });
+  sendTokenResponse(user, 200, res);
 });
 
 /**
@@ -48,8 +67,5 @@ export const loginUser = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Invalid credentials!", 401));
   }
 
-  // Create token
-  const token = user.getSignedJwtToken();
-
-  res.status(200).json({ success: true, token });
+  sendTokenResponse(user, 200, res);
 });
