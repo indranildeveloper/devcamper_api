@@ -1,28 +1,7 @@
 import User from "../models/UserModel.js";
 import asyncHandler from "../middlewares/asyncMiddleware.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
-
-// Get token from model, create cookie and send response
-const sendTokenResponse = (user, statusCode, res) => {
-  // Create token
-  const token = user.getSignedJwtToken();
-
-  const cookieOptions = {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-  };
-
-  if (process.env.NODE_ENV === "production") {
-    cookieOptions.secure = true;
-  }
-
-  res
-    .status(statusCode)
-    .cookie("token", token, cookieOptions)
-    .json({ success: true, token });
-};
+import sendTokenResponse from "../utils/sendTokenResponse.js";
 
 /**
  * @desc    Register user
@@ -68,4 +47,15 @@ export const loginUser = asyncHandler(async (req, res, next) => {
   }
 
   sendTokenResponse(user, 200, res);
+});
+
+/**
+ * @desc    Get the current logged in user
+ * @route   GET /api/v1/auth/currentUser
+ * @access  Private
+ */
+export const getCurrentUser = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  res.status(200).json({ success: true, data: user });
 });
