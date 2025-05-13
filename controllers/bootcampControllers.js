@@ -72,14 +72,7 @@ export const createBootcamp = asyncHandler(async (req, res, next) => {
  * @access  Private
  */
 export const updateBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findByIdAndUpdate(
-    req.params.bootcampId,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    }
-  );
+  let bootcamp = await Bootcamp.findById(req.params.bootcampId);
 
   if (!bootcamp) {
     return next(
@@ -89,6 +82,21 @@ export const updateBootcamp = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
+  // Make sure the user is bootcamp owner
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorResponse(
+        `User with the ID ${req.user.id} is not authorized to update this bootcamp!`,
+        401
+      )
+    );
+  }
+
+  bootcamp = await Bootcamp.findByIdAndUpdate(req.params.bootcampId, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   res.status(200).json({
     success: true,
@@ -109,6 +117,16 @@ export const deleteBootcamp = asyncHandler(async (req, res, next) => {
       new ErrorResponse(
         `Bootcamp not found with id of ${req.params.bootcampId}!`,
         404
+      )
+    );
+  }
+
+  // Make sure the user is bootcamp owner
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorResponse(
+        `User with the ID ${req.user.id} is not authorized to delete this bootcamp!`,
+        401
       )
     );
   }
@@ -168,6 +186,16 @@ export const uploadBootcampPhoto = asyncHandler(async (req, res, next) => {
       new ErrorResponse(
         `Bootcamp not found with id of ${req.params.bootcampId}!`,
         404
+      )
+    );
+  }
+
+  // Make sure the user is bootcamp owner
+  if (bootcamp.user.toString() !== req.user.id && req.user.role !== "admin") {
+    return next(
+      new ErrorResponse(
+        `User with the ID ${req.user.id} is not authorized to update this bootcamp!`,
+        401
       )
     );
   }
