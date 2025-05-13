@@ -9,6 +9,7 @@ import {
 import Course from "../models/CourseModel.js";
 import advancedResults from "../middlewares/advancedResultsMiddleware.js";
 import protectRoute from "../middlewares/authMiddleware.js";
+import authorizeRole from "../middlewares/authorizeMiddleware.js";
 
 const router = express.Router({ mergeParams: true });
 
@@ -21,11 +22,11 @@ router
     }),
     getCourses
   )
-  .post(protectRoute, createCourse);
+  .post(protectRoute, authorizeRole("publisher", "admin"), createCourse);
 router
   .route("/:courseId")
   .get(getCourse)
-  .put(protectRoute, updateCourse)
-  .delete(protectRoute, deleteCourse);
+  .put(protectRoute, authorizeRole("publisher", "admin"), updateCourse)
+  .delete(protectRoute, authorizeRole("publisher", "admin"), deleteCourse);
 
 export default router;
