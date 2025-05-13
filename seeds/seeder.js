@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import colors from "colors";
 import Bootcamp from "../models/BootcampModel.js";
 import Course from "../models/CourseModel.js";
+import User from "../models/UserModel.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,12 +29,16 @@ const bootcamps = JSON.parse(
 const courses = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/courses.json`, "utf-8")
 );
+const users = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/users.json`, "utf-8")
+);
 
 // Import into database
 const importData = async () => {
   try {
     await Bootcamp.create(bootcamps);
     await Course.create(courses);
+    await User.create(users);
     console.log("Data Imported...".green.inverse);
     process.exit(1);
   } catch (error) {
@@ -46,6 +51,7 @@ const destroyData = async () => {
   try {
     await Bootcamp.deleteMany();
     await Course.deleteMany();
+    await User.deleteMany();
     console.log("Data Destroyed...".red.inverse);
     process.exit(1);
   } catch (error) {
