@@ -466,6 +466,7 @@ __metadata:
     mongoose: "npm:^8.14.1"
     morgan: "npm:^1.10.0"
     node-geocoder: "npm:^4.4.1"
+    nodemailer: "npm:^7.0.3"
     nodemon: "npm:^3.1.10"
     qs: "npm:^6.14.0"
     slugify: "npm:^1.6.6"
@@ -1414,6 +1415,13 @@ __metadata:
   bin:
     node-gyp: bin/node-gyp.js
   checksum: 10c0/bd8d8c76b06be761239b0c8680f655f6a6e90b48e44d43415b11c16f7e8c15be346fba0cbf71588c7cdfb52c419d928a7d3db353afc1d952d19756237d8f10b9
+  languageName: node
+  linkType: hard
+
+"nodemailer@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "nodemailer@npm:7.0.3"
+  checksum: 10c0/835492262328471b94a080cea43ea20f4232e19a915400cd71c7f4f4ab93a7d361775154eebe30a8fc40379eecf11a0bbc73e6cf4bbee9dccb6dd1cf7a1dc792
   languageName: node
   linkType: hard
 
