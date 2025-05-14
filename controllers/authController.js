@@ -1,3 +1,4 @@
+import * as crypto from "node:crypto";
 import User from "../models/UserModel.js";
 import asyncHandler from "../middlewares/asyncMiddleware.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
@@ -63,7 +64,7 @@ export const getCurrentUser = asyncHandler(async (req, res, next) => {
 
 /**
  * @desc    Forgot password
- * @route   GET /api/v1/auth/forgotpassword
+ * @route   POST /api/v1/auth/forgotpassword
  * @access  Public
  */
 export const forgotPassword = asyncHandler(async (req, res, next) => {
@@ -81,7 +82,7 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
   // Create reset url
   const resetUrl = `${req.protocol}://${req.get(
     "host"
-  )}/api/v1/resetpassword/${resetToken}`;
+  )}/api/v1/auth/resetpassword/${resetToken}`;
 
   const message = `You are receiving this email because you (or someone else) has requested to reset the password of your account. Please make a PUT request to: \n\n ${resetUrl}`;
 
@@ -102,4 +103,35 @@ export const forgotPassword = asyncHandler(async (req, res, next) => {
 
     return next(new ErrorResponse("Email could not be sent!", 500));
   }
+});
+
+/**
+ * @desc    Reset Password
+ * @route   PUT /api/v1/auth/resetpassword/:resetToken
+ * @access  Public
+ */
+export const resetPassword = asyncHandler(async (req, res, next) => {
+  // Get hashed token
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.resetToken)
+    .digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new ErrorResponse("Invalid Token!", 400));
+  }
+
+  // Set the new password
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
 });
