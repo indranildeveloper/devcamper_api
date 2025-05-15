@@ -7,6 +7,7 @@ import {
   resetPassword,
   updateDetails,
   updatePassword,
+  logoutUser,
 } from "../controllers/authController.js";
 import protectRoute from "../middlewares/authMiddleware.js";
 
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
+router.route("/logout").get(logoutUser);
 router.route("/currentUser").get(protectRoute, getCurrentUser);
 router.route("/updatedetails").put(protectRoute, updateDetails);
 router.route("/updatepassword").put(protectRoute, updatePassword);
