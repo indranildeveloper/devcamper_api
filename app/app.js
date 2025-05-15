@@ -7,6 +7,7 @@ import colors from "colors";
 import qs from "qs";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
+import mongoSanitize from "express-mongo-sanitize";
 import connectDB from "../database/database.js";
 import authRoutes from "../routes/authRoutes.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
@@ -43,6 +44,9 @@ if (process.env.NODE_ENV === "development") {
 
 // File uploading
 app.use(fileUpload());
+
+// Sanitize data
+app.use(mongoSanitize());
 
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);

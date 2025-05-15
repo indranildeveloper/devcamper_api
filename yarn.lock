@@ -462,6 +462,7 @@ __metadata:
     dotenv: "npm:^16.5.0"
     express: "npm:^5.1.0"
     express-fileupload: "npm:^1.5.1"
+    express-mongo-sanitize: "npm:^2.2.0"
     jsonwebtoken: "npm:^9.0.2"
     mongoose: "npm:^8.14.1"
     morgan: "npm:^1.10.0"
@@ -608,6 +609,13 @@ __metadata:
   dependencies:
     busboy: "npm:^1.6.0"
   checksum: 10c0/6d2cae43958bd6bc7710a45ce71dfd1bb378611ea99c7c81aaa45655eff837ce969af8062b9c882ed05bbf179b4185b01b2d53f41ce5c242f7eac59cf280b1d1
+  languageName: node
+  linkType: hard
+
+"express-mongo-sanitize@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "express-mongo-sanitize@npm:2.2.0"
+  checksum: 10c0/1d77736df6ef3947ad5a45a879c99f09f6d81f12833af2a4175b909a89732e44e9524cf55274a591e29813f3115c2793bed4186e9c6a523ed62b13185a342186
   languageName: node
   linkType: hard
 
