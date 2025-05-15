@@ -12,6 +12,7 @@ import authRoutes from "../routes/authRoutes.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
 import courseRoutes from "../routes/courseRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
+import reviewRoutes from "../routes/reviewRoutes.js";
 import errorHandler from "../middlewares/errorMiddleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -48,6 +49,7 @@ app.use("/api/v1/bootcamps", bootcampRoutes);
 app.use("/api/v1/courses", courseRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
 
 // Error middleware
 app.use(errorHandler);
