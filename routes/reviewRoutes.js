@@ -1,5 +1,5 @@
 import express from "express";
-import { getReviews } from "../controllers/reviuewController.js";
+import { getReviews, getReview } from "../controllers/reviewController.js";
 import Review from "../models/ReviewModel.js";
 import advancedResults from "../middlewares/advancedResultsMiddleware.js";
 import protectRoute from "../middlewares/authMiddleware.js";
@@ -14,5 +14,7 @@ router.route("/").get(
   }),
   getReviews
 );
+
+router.route("/:reviewId").get(getReview);
 
 export default router;

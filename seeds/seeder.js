@@ -7,6 +7,7 @@ import colors from "colors";
 import Bootcamp from "../models/BootcampModel.js";
 import Course from "../models/CourseModel.js";
 import User from "../models/UserModel.js";
+import Review from "../models/ReviewModel.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,6 +33,9 @@ const courses = JSON.parse(
 const users = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/users.json`, "utf-8")
 );
+const reviews = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/reviews.json`, "utf-8")
+);
 
 // Import into database
 const importData = async () => {
@@ -39,6 +43,7 @@ const importData = async () => {
     await Bootcamp.create(bootcamps);
     await Course.create(courses);
     await User.create(users);
+    await Review.create(reviews);
     console.log("Data Imported...".green.inverse);
     process.exit(1);
   } catch (error) {
@@ -52,6 +57,7 @@ const destroyData = async () => {
     await Bootcamp.deleteMany();
     await Course.deleteMany();
     await User.deleteMany();
+    await Review.deleteMany();
     console.log("Data Destroyed...".red.inverse);
     process.exit(1);
   } catch (error) {
