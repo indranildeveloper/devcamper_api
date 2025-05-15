@@ -12,6 +12,7 @@ import helmet from "helmet";
 import { xss } from "express-xss-sanitizer";
 import { rateLimit } from "express-rate-limit";
 import hpp from "hpp";
+import cors from "cors";
 import connectDB from "../database/database.js";
 import authRoutes from "../routes/authRoutes.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
@@ -68,6 +69,9 @@ app.use(limiter);
 
 // Prevent http param pollution
 app.use(hpp());
+
+// Enable CORS
+app.use(cors());
 
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);
