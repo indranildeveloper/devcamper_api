@@ -8,6 +8,10 @@ import qs from "qs";
 import fileUpload from "express-fileupload";
 import cookieParser from "cookie-parser";
 import mongoSanitize from "express-mongo-sanitize";
+import helmet from "helmet";
+import { xss } from "express-xss-sanitizer";
+import { rateLimit } from "express-rate-limit";
+import hpp from "hpp";
 import connectDB from "../database/database.js";
 import authRoutes from "../routes/authRoutes.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
@@ -46,7 +50,24 @@ if (process.env.NODE_ENV === "development") {
 app.use(fileUpload());
 
 // Sanitize data
-app.use(mongoSanitize());
+// app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// XSS clean
+app.use(xss());
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  limit: 100,
+});
+
+app.use(limiter);
+
+// Prevent http param pollution
+app.use(hpp());
 
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);
