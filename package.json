@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "NODE_ENV=production node app/app.js",
-    "dev": "nodemon app/app.js"
+    "dev": "nodemon app/app.js",
+    "generate-docs": "node docs/generateDocs.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -27,11 +28,15 @@
     "node-geocoder": "^4.4.1",
     "nodemailer": "^7.0.3",
     "qs": "^6.14.0",
-    "slugify": "^1.6.6"
+    "redoc": "^2.5.0",
+    "slugify": "^1.6.6",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/node": "^22.15.17",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3"
   },
   "packageManager": "yarn@4.6.0"
 }

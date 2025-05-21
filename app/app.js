@@ -13,6 +13,8 @@ import { xss } from "express-xss-sanitizer";
 import { rateLimit } from "express-rate-limit";
 import hpp from "hpp";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import specs from "../docs/swagger.js";
 import connectDB from "../database/database.js";
 import authRoutes from "../routes/authRoutes.js";
 import bootcampRoutes from "../routes/bootcampRoutes.js";
@@ -73,12 +75,48 @@ app.use(hpp());
 // Enable CORS
 app.use(cors());
 
+app.get("/api/v1/redoc", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Content-Security-Policy", "script-src blob:");
+  res.header("Content-Security-Policy", "worker-src blob:");
+
+  return res.send(`
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <title>Document</title>
+      <style>
+          * {
+              margin: 0;
+              padding: 0;
+              box-sizing: border-box;
+          }
+          body {
+              font-family: Arial, sans-serif;
+              line-height: 1.6;
+          }
+      </style>
+  </head>
+  <body>
+    <redoc spec-url="/openapi/openapi.json" suppress-warnings></redoc>
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
+  </body>
+  </html>
+  `);
+});
+
 // Mount routes
 app.use("/api/v1/bootcamps", bootcampRoutes);
 app.use("/api/v1/courses", courseRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
+
+// API documentation
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 // Error middleware
 app.use(errorHandler);
@@ -88,7 +126,7 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port: ${PORT}`.yellow
-      .bold
+      .bold,
   );
 });
 

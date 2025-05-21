@@ -24,3 +24,7 @@ yarn start
 
 - Version: 1.0.0
 - License: MIT
+
+## Improvements can be made
+- Add refresh token for authentication
+- Add schema validation for req.body fields (can use zod or joi)
