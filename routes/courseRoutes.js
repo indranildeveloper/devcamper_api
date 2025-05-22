@@ -170,6 +170,102 @@ const router = express.Router({ mergeParams: true });
 /**
  * @swagger
  * /api/v1/bootcamps/{bootcampId}/courses:
+ *   get:
+ *     summary: Get all courses for a specific bootcamp
+ *     description: Retrieve a list of all courses associated with a specific bootcamp
+ *     tags: [Courses]
+ *     parameters:
+ *       - in: path
+ *         name: bootcampId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID of the bootcamp to get courses for
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved courses for the bootcamp
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 count:
+ *                   type: integer
+ *                   example: 2
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                         example: "5d725a4a7b292f5f8ceff789"
+ *                       title:
+ *                         type: string
+ *                         example: "Front End Web Development"
+ *                       description:
+ *                         type: string
+ *                         example: "This course will provide you with all of the essentials to become a successful frontend web developer..."
+ *                       weeks:
+ *                         type: string
+ *                         example: "8"
+ *                       tuition:
+ *                         type: number
+ *                         example: 8000
+ *                       minimumSkill:
+ *                         type: string
+ *                         enum: [beginner, intermediate, advanced]
+ *                         example: "beginner"
+ *                       scholarshipAvailable:
+ *                         type: boolean
+ *                         example: false
+ *                       bootcamp:
+ *                         type: string
+ *                         example: "5d713995b721c3bb38c1f5d0"
+ *                       user:
+ *                         type: string
+ *                         example: "5d7a514b5d2c12c7449be045"
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-05-15T07:27:14.466Z"
+ *                       __v:
+ *                         type: integer
+ *                         example: 0
+ *       404:
+ *         description: Bootcamp not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No bootcamp with the id of `bootcampId` was found!"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error!"
+ */
+
+/**
+ * @swagger
+ * /api/v1/bootcamps/{bootcampId}/courses:
  *   post:
  *     summary: Create a new course in a bootcamp
  *     description: Create a new course within the specified bootcamp (requires authentication and publisher/admin role).
@@ -274,62 +370,164 @@ const router = express.Router({ mergeParams: true });
 /**
  * @swagger
  * /api/v1/bootcamps/{bootcampId}/courses:
- *   get:
- *     summary: Get all courses for a specific bootcamp
- *     description: Retrieve a list of all courses associated with a specific bootcamp
+ *   post:
+ *     summary: Create a new course in a bootcamp
+ *     description: Create a new course within the specified bootcamp (requires authentication and publisher/admin role)
  *     tags: [Courses]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: bootcampId
  *         required: true
  *         schema:
  *           type: string
- *         description: ID of the bootcamp to get courses for
+ *         description: ID of the bootcamp to add the course to
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - description
+ *               - weeks
+ *               - tuition
+ *               - minimumSkill
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Full Stack Web Development 3"
+ *               description:
+ *                 type: string
+ *                 example: "In this course you will learn full stack web development..."
+ *               weeks:
+ *                 type: integer
+ *                 example: 12
+ *               tuition:
+ *                 type: number
+ *                 example: 22500
+ *               minimumSkill:
+ *                 type: string
+ *                 enum: [beginner, intermediate, advanced]
+ *                 example: "intermediate"
+ *               scholarshipAvailable:
+ *                 type: boolean
+ *                 example: true
  *     responses:
- *       200:
- *         description: Successfully retrieved courses for the bootcamp
+ *       201:
+ *         description: Course created successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               count: 2
- *               data:
- *                 - _id: "5d725a4a7b292f5f8ceff789"
- *                   title: "Front End Web Development"
- *                   description: "This course will provide you with all of the essentials to become a successful frontend web developer..."
- *                   weeks: "8"
- *                   tuition: 8000
- *                   minimumSkill: "beginner"
- *                   scholarshipAvailable: false
- *                   bootcamp: "5d713995b721c3bb38c1f5d0"
- *                   user: "5d7a514b5d2c12c7449be045"
- *                   createdAt: "2025-05-15T07:27:14.466Z"
- *                   __v: 0
- *                 - _id: "5d725c84c4ded7bcb480eaa0"
- *                   title: "Full Stack Web Development"
- *                   description: "In this course you will learn full stack web development..."
- *                   weeks: "12"
- *                   tuition: 10000
- *                   minimumSkill: "intermediate"
- *                   scholarshipAvailable: false
- *                   bootcamp: "5d713995b721c3bb38c1f5d0"
- *                   user: "5d7a514b5d2c12c7449be045"
- *                   createdAt: "2025-05-15T07:27:14.466Z"
- *                   __v: 0
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "682ecb8495cbe725a154f3be"
+ *                     title:
+ *                       type: string
+ *                       example: "Full Stack Web Development 3"
+ *                     description:
+ *                       type: string
+ *                       example: "In this course you will learn full stack web development..."
+ *                     weeks:
+ *                       type: string
+ *                       example: "12"
+ *                     tuition:
+ *                       type: number
+ *                       example: 22500
+ *                     minimumSkill:
+ *                       type: string
+ *                       example: "intermediate"
+ *                     scholarshipAvailable:
+ *                       type: boolean
+ *                       example: false
+ *                     bootcamp:
+ *                       type: string
+ *                       example: "682dfb17f89c16f97a1eca52"
+ *                     user:
+ *                       type: string
+ *                       example: "5d7a514b5d2c12c7449be045"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-05-22T07:00:20.904Z"
+ *                     __v:
+ *                       type: integer
+ *                       example: 0
+ *       400:
+ *         description: Bad request - Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Please add a title"
+ *       401:
+ *         description: Unauthorized - Authentication required
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Not authorized to access this route"
+ *       403:
+ *         description: Forbidden - User is not authorized to add a course to this bootcamp
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "User is not authorized to add a course to this bootcamp"
  *       404:
  *         description: Bootcamp not found
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "No bootcamp with the id of `bootcampId` was found!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No bootcamp with the id of `bootcampId` was found!"
  *       500:
  *         description: Server error
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "Internal Server Error!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error!"
  */
 
 /**
@@ -351,34 +549,78 @@ const router = express.Router({ mergeParams: true });
  *         description: Successfully retrieved the course
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               data:
- *                 _id: "5d725a4a7b292f5f8ceff789"
- *                 title: "Front End Web Development"
- *                 description: "This course will provide you with all of the essentials to become a successful frontend web developer..."
- *                 weeks: "8"
- *                 tuition: 8000
- *                 minimumSkill: "beginner"
- *                 scholarshipAvailable: false
- *                 bootcamp: null
- *                 user: "5d7a514b5d2c12c7449be045"
- *                 createdAt: "2025-05-15T07:27:14.466Z"
- *                 __v: 0
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "5d725a4a7b292f5f8ceff789"
+ *                     title:
+ *                       type: string
+ *                       example: "Front End Web Development"
+ *                     description:
+ *                       type: string
+ *                       example: "This course will provide you with all of the essentials to become a successful frontend web developer..."
+ *                     weeks:
+ *                       type: string
+ *                       example: "8"
+ *                     tuition:
+ *                       type: number
+ *                       example: 8000
+ *                     minimumSkill:
+ *                       type: string
+ *                       enum: [beginner, intermediate, advanced]
+ *                       example: "beginner"
+ *                     scholarshipAvailable:
+ *                       type: boolean
+ *                       example: false
+ *                     bootcamp:
+ *                       oneOf:
+ *                         - type: string
+ *                           example: "5d713995b721c3bb38c1f5d0"
+ *                         - type: "null"
+ *                     user:
+ *                       type: string
+ *                       example: "5d7a514b5d2c12c7449be045"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-05-15T07:27:14.466Z"
+ *                     __v:
+ *                       type: integer
+ *                       example: 0
  *       404:
  *         description: Course not found
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "No course with the id of `courseId` was found!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No course with the id of `courseId` was found!"
  *       500:
  *         description: Server error
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "Internal Server Error!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error!"
  */
 
 /**
@@ -407,80 +649,140 @@ const router = express.Router({ mergeParams: true });
  *               title:
  *                 type: string
  *                 description: Title of the course
- *                 example: "Front End Web Development"
+ *                 example: "Updated Course Title"
  *               description:
  *                 type: string
  *                 description: Detailed description of the course
  *               weeks:
  *                 type: string
  *                 description: Duration of the course in weeks
- *                 example: "8"
+ *                 example: "10"
  *               tuition:
  *                 type: number
  *                 description: Cost of the course
- *                 example: 13000
+ *                 example: 12000
  *               minimumSkill:
  *                 type: string
  *                 enum: [beginner, intermediate, advanced]
  *                 description: Minimum skill level required
- *                 example: "advanced"
+ *                 example: "intermediate"
  *               scholarshipAvailable:
  *                 type: boolean
  *                 description: Whether scholarships are available
+ *                 example: true
  *     responses:
  *       200:
  *         description: Course updated successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               data:
- *                 _id: "5d725a4a7b292f5f8ceff789"
- *                 title: "Front End Web Development"
- *                 description: "This course will provide you with all of the essentials to become a successful frontend web developer..."
- *                 weeks: "8"
- *                 tuition: 13000
- *                 minimumSkill: "advanced"
- *                 scholarshipAvailable: false
- *                 bootcamp: "5d713995b721c3bb38c1f5d0"
- *                 user: "5d7a514b5d2c12c7449be045"
- *                 createdAt: "2025-05-15T07:27:14.466Z"
- *                 __v: 0
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     _id:
+ *                       type: string
+ *                       example: "5d725a4a7b292f5f8ceff789"
+ *                     title:
+ *                       type: string
+ *                       example: "Updated Course Title"
+ *                     description:
+ *                       type: string
+ *                       example: "Updated course description..."
+ *                     weeks:
+ *                       type: string
+ *                       example: "10"
+ *                     tuition:
+ *                       type: number
+ *                       example: 12000
+ *                     minimumSkill:
+ *                       type: string
+ *                       example: "intermediate"
+ *                     scholarshipAvailable:
+ *                       type: boolean
+ *                       example: true
+ *                     bootcamp:
+ *                       type: string
+ *                       example: "5d713995b721c3bb38c1f5d0"
+ *                     user:
+ *                       type: string
+ *                       example: "5d7a514b5d2c12c7449be045"
+ *                     createdAt:
+ *                       type: string
+ *                       format: date-time
+ *                       example: "2025-05-15T07:27:14.466Z"
+ *                     __v:
+ *                       type: integer
+ *                       example: 0
  *       400:
  *         description: Bad request - Invalid input data
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "Please add a title"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Please provide valid data to update"
  *       401:
  *         description: Unauthorized - Authentication required
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "Not authenticated to access this resource!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Not authenticated to access this resource!"
  *       403:
  *         description: Forbidden - User is not authorized to update this course
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "User is not authorized to update this course!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "User is not authorized to update this course!"
  *       404:
  *         description: Course not found
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "No course with the id of `courseId` was found!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No course with the id of `courseId` was found!"
  *       500:
  *         description: Server error
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "Internal Server Error!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error!"
  */
 
 /**
@@ -504,37 +806,67 @@ const router = express.Router({ mergeParams: true });
  *         description: Course deleted successfully
  *         content:
  *           application/json:
- *             example:
- *               success: true
- *               data: {}
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   example: {}
  *       401:
  *         description: Unauthorized - Authentication required
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "Not authenticated to access this resource!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Not authenticated to access this resource!"
  *       403:
  *         description: Forbidden - User is not authorized to delete this course
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "User is not authorized to delete this course!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "User is not authorized to delete this course!"
  *       404:
  *         description: Course not found
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "No course with the id of `courseId` was found!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "No course with the id of `courseId` was found!"
  *       500:
  *         description: Server error
  *         content:
  *           application/json:
- *             example:
- *               success: false
- *               error: "Internal Server Error!"
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 error:
+ *                   type: string
+ *                   example: "Internal Server Error!"
  */
 
 router
