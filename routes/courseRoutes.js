@@ -161,6 +161,8 @@ const router = express.Router({ mergeParams: true });
  *              properties:
  *                success:
  *                  type: boolean
+Body
+
  *                  example: false
  *                error:
  *                  type: string

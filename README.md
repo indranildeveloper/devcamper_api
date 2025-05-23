@@ -26,5 +26,7 @@ yarn start
 - License: MIT
 
 ## Improvements can be made
+
+- Migrate over to TypeScript
 - Add refresh token for authentication
 - Add schema validation for req.body fields (can use zod or joi)
